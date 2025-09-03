@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>滨江怀想 · v7.9</title>
+
+<!-- PWA manifest & iOS support -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#6b4b3e">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<style>
+  :root{--w:1080px;--coffee:#6b4b3e;--hot:140px}
+  *{box-sizing:border-box}
+  body{
+    font-family:system-ui,"Segoe UI","Noto Sans CJK SC","Microsoft YaHei","PingFang SC",Arial;
+    max-width:var(--w);margin:0 auto;background:#fafafa;color:#222
+  }
+  header,main,section{padding:16px 18px}
+  .hide{display:none}
+
+  /* 封面 */
+  #page-cover{min-height:66vh;text-align:center}
+  .cover-title{font-size:72px;line-height:1.2;color:var(--coffee);margin:40px 0 12px}
+  .cover-author{font-size:32px;color:var(--coffee);margin:0 0 18px}
+  .cover-tip button{padding:8px 14px;background:#0b59d9;color:#fff;border-radius:8px;border:0;cursor:pointer}
+  .hint{color:#777;font-size:13px;margin-top:8px;line-height:1.6;text-align:left;display:inline-block}
+  img.cover{display:block;width:100%;max-height:64vh;object-fit:contain;border-radius:8px;margin:12px auto}
+
+  /* 目录外观 */
+  .cat-box{background:#fff;border:1px solid #eee;border-radius:12px;padding:6px;margin:16px 0}
+  .group h3{margin:10px 6px 8px;font-size:18px;border-left:4px solid #222;padding-left:8px}
+  .group a{display:block;padding:12px 10px;text-decoration:none}
+  .group a:link,.group a:visited{color:#0b59d9}
+  .group a:hover{text-decoration:underline;background:#fafcff}
+
+  /* 自序 iframe 包裹：满屏 */
+  .preface-wrap{position:relative;height:calc(100vh - 60px)}
+
+  /* 正文 iframe：满屏 */
+  #view{
+    width:100%;
+    height:calc(100vh - 60px);
+    border:none;
+    background:#fff;
+    display:block;
+    margin:0;
+  }
+
+  /* 页面模式角落热区（封面/自序/目录用；正文关闭） */
+  .hot{position:fixed;bottom:0;width:var(--hot);height:var(--hot);
+       z-index:2147483647;background:transparent;pointer-events:none}
+  #hotBL{left:0} #hotBR{right:0}
+
+  @media (max-width:520px){
+    :root{--hot:110px}
+    .cover-title{white-space:nowrap!important;display:inline-block;
+      font-size:clamp(22px,7vw,30px)!important;line-height:1.15!important;
+      padding:6px 10px!important;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
+    .cover-author{font-size:clamp(14px,4.2vw,18px)!important;
+      font-family:"KaiTi","STKaiti","Kaiti SC","KaiTi_GB2312","DFKai-SB",serif!important;
+      font-weight:600;letter-spacing:.5px}
+  }
+</style>
+<base href="./">
+</head>
+<body>
+
+<!-- 封面 -->
+<section id="page-cover">
+  <h1 class="cover-title">滨江怀想</h1>
+  <h2 class="cover-author">吴国焕</h2>
+  <img id="coverImg" class="cover" src="cover.jpg" alt="封面">
+  <p class="cover-tip">
+    <button id="enterBrowseBtn" type="button">进入浏览</button>
+    <button id="a2hs" style="display:none;margin-left:10px;" onclick="installApp()">安装到主屏</button>
+  </p>
+  <div class="hint">
+    温馨提示：<br>
+    点击右下角 → 下一页<br>
+    点击左下角 → 上一页<br>
+    点击中央 → 返回目录
+  </div>
+</section>
+
+<!-- 自序 -->
+<section id="page-preface" class="hide">
+  <h2>自序</h2>
+  <div class="preface-wrap">
+    <iframe id="viewPreface" style="width:100%;height:100%;border:none"></iframe>
+  </div>
+</section>
+
+<!-- 目录 -->
+<section id="page-toc1" class="hide"><h2>目录（一）</h2><div class="cat-box" id="toc1"></div></section>
+<section id="page-toc2" class="hide"><h2>目录（二）</h2><div class="cat-box" id="toc2"></div></section>
+<section id="page-toc3" class="hide"><h2>目录（三）</h2><div class="cat-box" id="toc3"></div></section>
+
+<!-- 正文 -->
+<iframe id="view" title="阅读区" class="hide"></iframe>
+
+<!-- 页面模式角落热区 -->
+<div id="hotBL" class="hot" aria-hidden="true"></div>
+<div id="hotBR" class="hot" aria-hidden="true"></div>
+
+<script>
+(function(){
+  const $=s=>document.querySelector(s);
+  const view=$('#view'), viewPreface=$('#viewPreface');
+  const hotBL=$('#hotBL'), hotBR=$('#hotBR');
+  const pages=['page-cover','page-preface','page-toc1','page-toc2','page-toc3'];
+  let pageIdx=0, tocFlat={1:[],2:[],3:[]}, allArticles=[], cur={which:3,g:-1};
+  const HOT=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--hot'))||140;
+
+  /* —— 注入：强制服体 + 乱码清洗 + 清理字体声明 + iframe 内三热区 —— */
+  function injectCommon(d, mode){
+    if(!d || d.getElementById('_Injected')) return;
+
+    /* 样式：正文宋体，标题黑体；标题字号放大；三热区容器 */
+    const s=d.createElement('style'); s.id='_Injected';
+    s.textContent=`:where(html,body,*,p,div,span,li,td,th,font,em,i,u,blockquote,section,article){
+        font-family:"SimSun","宋体",serif !important; font-style:normal !important}
+      :where(h1,h2,h3,h4,h5,h6,strong,b){
+        font-family:"Microsoft YaHei","Noto Sans CJK SC","PingFang SC",sans-serif !important;
+        font-weight:700 !important}
+      body{padding:14px;max-width:900px;margin:0 auto;background:#fff;font-size:16px !important;line-height:1.9 !important}
+      p{text-indent:2em;margin:.7em 0}
+      img{max-width:100%;height:auto;display:block;margin:10px auto}
+      h1{font-size:24px !important} h2{font-size:22px !important} h3{font-size:20px !important}
+      /* iframe 内三热区 */
+      #_hotL,#_hotR,#_hotC{position:fixed;z-index:2147483647;background:transparent}
+      #_hotL{left:0;bottom:0;width:${HOT}px;height:${HOT}px}
+      #_hotR{right:0;bottom:0;width:${HOT}px;height:${HOT}px}
+      #_hotC{left:30%;right:30%;top:30%;bottom:30%}`;
+    d.head.appendChild(s);
+
+    /* 清理 <style> 中的 font-family/@font-face，仅移除“字体”相关，避免干扰版式 */
+    d.querySelectorAll('style').forEach(st=>{
+      let css=st.textContent||'';
+      if(/\bfont-family\b|\b@font-face\b|\bfont\s*:/.test(css)){
+        css = css
+          .replace(/@font-face[\s\S]*?\{[\s\S]*?\}/gi,'')
+          .replace(/font-family\s*:[^;{}]+;?/gi,'')
+          .replace(/font\s*:[^;{}]+;?/gi,'');
+        st.textContent=css;
+      }
+    });
+    /* 清理内联字体声明 & <font face> */
+    d.querySelectorAll('[style]').forEach(el=>{
+      const cs=el.style; cs.removeProperty('font-family'); cs.removeProperty('font');
+      if(/font-family\s*:|font\s*:/.test(el.getAttribute('style')||'')){
+        el.setAttribute('style',(el.getAttribute('style')||'')
+          .replace(/font-family\s*:[^;]+;?/gi,'')
+          .replace(/font\s*:[^;]+;?/gi,''));
+      }
+    });
+    d.querySelectorAll('font').forEach(f=>{
+      f.removeAttribute('face');
+      const span=d.createElement('span');
+      [...f.attributes].forEach(a=>{ if(a.name!=='face') span.setAttribute(a.name,a.value); });
+      while(f.firstChild) span.appendChild(f.firstChild);
+      f.replaceWith(span);
+    });
+
+    /* 乱码清洗：把常见误码替换回 “ ” — 等（用于自序/正文） */
+    (function cleanse(root){
+      const map = new Map([
+        ["\u0091","‘"],["\u0092","’"],["\u0093","“"],["\u0094","”"],
+        ["\u2018","‘"],["\u2019","’"],["\u201C","“"],["\u201D","”"],
+        ["\u2013","—"],["\u2014","—"],["\u00A0"," "]
+      ]);
+      function walk(n){
+        if(n.nodeType===3){
+          let t=n.nodeValue||"";
+          map.forEach((v,k)=>{ t=t.split(k).join(v); });
+          t=t.replace(/Ã¢ÂÂ|Ã¢ÂÅ“|â€œ/g,"“")
+             .replace(/Ã¢ÂÂ|â€/g,"”")
+             .replace(/Ã¢ÂÂ|â€”/g,"—");
+          n.nodeValue=t;
+        }else if(n.nodeType===1 && n.childNodes){ n.childNodes.forEach(walk); }
+      }
+      walk(root||d.body);
+    })(d.body);
+
+    /* 创建 iframe 内三热区并绑定事件（恢复 v7.6 行为） */
+    const L=d.createElement('div'), R=d.createElement('div'), C=d.createElement('div');
+    L.id='_hotL'; R.id='_hotR'; C.id='_hotC';
+    d.body.appendChild(L); d.body.appendChild(R); d.body.appendChild(C);
+
+    if(mode==='preface'){
+      L.addEventListener('click',e=>{e.preventDefault(); pagePrev();});
+      R.addEventListener('click',e=>{e.preventDefault(); pageNext();});
+      C.addEventListener('click',e=>{e.preventDefault(); showPage(2);});
+    }else{ // article
+      L.addEventListener('click',e=>{e.preventDefault(); goArticle(-1);});
+      R.addEventListener('click',e=>{e.preventDefault(); goArticle(1);});
+      C.addEventListener('click',e=>{e.preventDefault(); showPage(cur.which+1); enablePageHotspots(true);});
+    }
+
+    /* 允许正文内正常链接点击（非热区） */
+    d.addEventListener('click',(ev)=>{
+      if(ev.target.closest && ev.target.closest('a')) return;
+    },{passive:true});
+  }
+
+  /* —— 页面角落热区 —— */
+  function enablePageHotspots(on){[hotBL,hotBR].forEach(el=>{el.style.pointerEvents=on?'auto':'none';});}
+  hotBL.addEventListener('click',()=>{if(view.classList.contains('hide')) pagePrev();});
+  hotBR.addEventListener('click',()=>{if(view.classList.contains('hide')) pageNext();});
+
+  function showPage(i){
+    pageIdx=((i%pages.length)+pages.length)%pages.length;
+    pages.forEach((id,idx)=>document.getElementById(id).classList.toggle('hide',idx!==pageIdx));
+    view.classList.add('hide'); enablePageHotspots(true);
+  }
+  function pagePrev(){if(pageIdx===0){if(allArticles.length){openArticleByG(allArticles.length-1,3);return;}}showPage(pageIdx-1);}
+  function pageNext(){if(pageIdx<4){showPage(pageIdx+1);return;}if(allArticles.length){openArticleByG(0,3);}else showPage(0);}
+
+  /* —— 进入浏览 —— */
+  $('#enterBrowseBtn').addEventListener('click',()=>showPage(1));
+
+  /* —— 自序 —— */
+  function renderPreface(){
+    const prefacePath='posts/' + decodeURIComponent('%E8%87%AA%E5%BA%8F') + '.html';
+    const tries=[0,80,240,600,1200];
+    function tryInject(){const d=viewPreface.contentDocument;if(d) injectCommon(d,'preface');}
+    viewPreface.addEventListener('load',tryInject);
+    viewPreface.src=prefacePath;
+    tries.forEach(ms=>setTimeout(tryInject,ms)); // 多次兜底，确保注入成功
+  }
+
+  /* —— 正文 —— */
+  function openArticle(which,url){
+    cur.which=which; const g=allArticles.findIndex(x=>x.url===url); cur.g=(g>=0?g:0);
+    pages.forEach(id=>document.getElementById(id).classList.add('hide')); enablePageHotspots(false);
+
+    const tries=[0,80,240,600,1200];
+    function tryInject(){const d=view.contentDocument;if(d) injectCommon(d,'article');}
+    view.addEventListener('load',tryInject);
+    view.src=allArticles[cur.g].url;
+    view.classList.remove('hide');
+    tries.forEach(ms=>setTimeout(tryInject,ms)); // 多次兜底
+  }
+  function openArticleByG(g,def){
+    cur.g=((g%allArticles.length)+allArticles.length)%allArticles.length;
+    cur.which=allArticles[cur.g]?.which??def;
+    openArticle(cur.which,allArticles[cur.g].url);
+  }
+  function goArticle(dir){
+    if(!allArticles.length) return;
+    let g=cur.g+dir;
+    if(g<0){showPage(4);enablePageHotspots(true);return;}
+    if(g>=allArticles.length){showPage(0);enablePageHotspots(true);return;}
+    cur.g=g; cur.which=allArticles[cur.g].which;
+    openArticle(cur.which,allArticles[cur.g].url);
+  }
+
+  /* —— 目录 —— */
+  async function loadCatalog(){try{const r=await fetch('_catalog.json');return await r.json();}catch{return {};}}
+  function enc(p){return String(p||'').trim().split('/').map(encodeURIComponent).join('/');}
+  function buildTOC(which,data){
+    const cont=$('#toc'+which); cont.innerHTML=''; tocFlat[which]=[];
+    Object.keys(data||{}).forEach(gn=>{
+      const box=document.createElement('div'); const h=document.createElement('h3');h.textContent=gn;box.appendChild(h);
+      const ul=document.createElement('ul');
+      (data[gn]||[]).forEach(it=>{
+        const url=enc(it.file);
+        const li=document.createElement('li'); const a=document.createElement('a');
+        a.textContent=it.title; a.href=url;
+        a.addEventListener('click',ev=>{ev.preventDefault();openArticle(which,url,it.title);});
+        li.appendChild(a); ul.appendChild(li);
+        tocFlat[which].push({title:it.title,url,which});
+      });
+      box.appendChild(ul); cont.appendChild(box);
+    });
+  }
+  function mergeAll(){allArticles=[...tocFlat[1],...tocFlat[2],...tocFlat[3]];}
+
+  /* —— 深链接 —— */
+  function handleDeepLink(){
+    const h=(location.hash||'').trim().toLowerCase();
+    if(!h) return;
+    if(h==='#read'){ showPage(1); }
+    else if(h==='#toc1'){ showPage(2); }
+    else if(h==='#toc2'){ showPage(3); }
+    else if(h==='#toc3'){ showPage(4); }
+    else if(h.startsWith('#art=')){
+      const n=parseInt(h.split('=')[1],10);
+      if(Number.isFinite(n)&&n>=1&&n<=allArticles.length){ openArticleByG(n-1,3); }
+    }
+  }
+  window.addEventListener('hashchange', handleDeepLink);
+
+  /* —— 启动 —— */
+  (async function start(){
+    renderPreface();
+    const raw=await loadCatalog();
+    buildTOC(1,raw.toc1||{}); buildTOC(2,raw.toc2||{}); buildTOC(3,raw.toc3||{});
+    mergeAll();
+    showPage(0);
+    handleDeepLink(); // 打开即处理 #read/#art=…
+  })();
+
+  /* —— SW 注册 & A2HS —— */
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./service-worker.js');
+  }
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt',(e)=>{
+    e.preventDefault();
+    deferredPrompt=e;
+    const btn=$('#a2hs');
+    if(btn) btn.style.display='inline-block';
+  });
+  async function installApp(){
+    if(!deferredPrompt) return;
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt=null;
+    const btn=$('#a2hs');
+    if(btn) btn.style.display='none';
+  }
+})();
+</script>
+</body>
+</html>
