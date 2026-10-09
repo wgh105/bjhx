@@ -1,0 +1,94 @@
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{background:#f5efe2;color:#2c2620;line-height:1.85;
+font-family:"Songti SC","Noto Serif CJK SC",STSong,SimSun,"宋体",serif;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
+a{color:#9c3b32}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px 70px}
+.cover{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+padding:40px 24px;text-align:center}
+.cover img{width:min(62vw,258px);border-radius:6px;display:block;margin:0 auto 30px;
+box-shadow:0 14px 40px rgba(80,55,20,.28)}
+.cover .go{display:inline-block;background:#9c3b32;color:#fff;text-decoration:none;
+border-radius:100px;padding:13px 42px;font-size:15px}
+.tips{margin-top:26px;max-width:330px;width:100%;border:1px solid #e2d8c4;border-radius:10px;
+padding:16px 20px 14px;text-align:left;background:rgba(255,253,247,.6)}
+.tips .tt{text-align:center;font-size:14px;letter-spacing:.24em;color:#9c3b32;font-weight:600;
+margin-bottom:10px;font-family:"Kaiti SC",KaiTi,"楷体",serif}
+.tips .tr{font-size:12.5px;color:#5c5347;line-height:2.05;font-family:"Kaiti SC",KaiTi,"楷体",serif}
+.tips .tr b{color:#2c2620;font-weight:600}
+/* ---- 可折叠目录页 ---- */
+.toc-new{max-width:520px;padding-top:18px}
+.toc-head{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #e2d8c4;
+padding-bottom:12px;margin-bottom:18px}
+.toc-tabs{font-size:18px;color:#2c2620;font-weight:600;letter-spacing:.1em}
+.toc-list{padding:0 4px}
+.toc-item{display:block;padding:13px 4px;border-bottom:1px dashed rgba(226,216,196,.75);
+color:#2c2620;text-decoration:none;font-size:15.5px}
+.toc-row{display:flex;align-items:center;padding:10px 4px;border-bottom:1px dashed rgba(226,216,196,.75)}
+.toc-arrow{color:#9c3b32;font-size:17px;width:34px;height:34px;line-height:34px;text-align:center;
+cursor:pointer;flex-shrink:0;margin-right:12px;border-radius:50%;background:rgba(156,59,50,.1);
+transform:rotate(0deg);transition:transform .18s;user-select:none}
+.toc-sec.open .toc-arrow{transform:rotate(90deg);background:rgba(156,59,50,.18)}
+.toc-title{flex:1;color:#2c2620;text-decoration:none;font-size:16px;letter-spacing:.06em;font-weight:600}
+.toc-kids{display:none;padding-left:28px}
+.toc-sec.open .toc-kids{display:block}
+.toc-kids .toc-item{border-bottom:none;padding:9px 4px;font-size:14px;color:#5c5347}
+.toc-kids .toc-item::before{content:"·";margin-right:8px;color:#9c3b32}
+.toc-item:active,.toc-title:active{background:rgba(226,216,196,.35)}
+/* ---- 栏目页 ---- */
+.pagehead{padding:34px 0 20px;text-align:center;border-bottom:2px solid #e2d8c4;margin-bottom:24px}
+.pagehead h1{margin:0;font-size:24px;letter-spacing:.22em;font-weight:600}
+.blk{margin:0 0 24px}
+.blk h2{margin:0 0 10px;font-size:17.5px;letter-spacing:.14em;font-weight:600;
+border-bottom:1.5px solid #e2d8c4;padding-bottom:9px}
+.blk h2 a{color:#2c2620;text-decoration:none}
+.blk h2 .num{font-size:12px;color:#9c3b32;font-family:"Kaiti SC",KaiTi,"楷体",serif;
+border:1px solid rgba(156,59,50,.3);border-radius:100px;padding:2px 9px;margin-right:8px;vertical-align:2px}
+.blk ol{list-style:none;margin:0;padding:0}
+.blk li{border-bottom:1px dashed rgba(226,216,196,.75)}
+.blk li:last-child{border-bottom:none}
+.blk li a{display:flex;gap:10px;align-items:baseline;padding:11px 4px;text-decoration:none;
+color:#2c2620;font-size:15.5px}
+.blk .n{font-size:11px;color:#8a8073;width:24px;flex-shrink:0;
+font-family:"Kaiti SC",KaiTi,"楷体",serif}
+.sec-hero{text-align:center;padding:26px 0 0}
+.sec-hero img{width:100%;max-width:520px;border-radius:6px;display:block;margin:0 auto 24px;
+box-shadow:0 8px 26px rgba(90,70,40,.16)}
+.sec-hero h1{font-size:27px;letter-spacing:.2em;margin:0 0 18px;font-weight:600}
+.sec-hero .intro{font-size:18px;line-height:2.05;color:#3a322a;text-align:left;text-indent:2em;
+font-family:"Kaiti SC",KaiTi,"楷体",serif;margin:0 0 30px}
+.art .secname{text-align:center;font-size:12px;letter-spacing:.28em;color:#9c3b32;
+margin:30px 0 10px;font-family:"Kaiti SC",KaiTi,"楷体",serif}
+.art .secname a{color:#9c3b32;text-decoration:none}
+.art .secname .sec-x{margin-left:12px;font-size:11px;color:#c3b8a2;cursor:pointer;
+border:1px solid #e2d8c4;border-radius:100px;padding:1px 7px;letter-spacing:0;
+font-family:sans-serif;vertical-align:1px}
+.art h1{font-size:23px;text-align:center;letter-spacing:.1em;line-height:1.5;margin:0 0 28px;font-weight:600}
+.bd{font-size:17px;line-height:2.05;overflow-wrap:break-word;overflow-x:hidden}
+.bd p{margin:0 0 .4em;text-indent:2em}
+.bd img{display:block;max-width:100%;height:auto;width:auto;margin:24px auto;border-radius:5px;
+box-shadow:0 4px 18px rgba(90,70,40,.13)}
+.bd h1,.bd h2,.bd h3{text-indent:0;font-size:17.5px;margin:1.6em 0 .7em;letter-spacing:.06em}
+.bd blockquote{margin:1.2em 0;padding:2px 0 2px 16px;border-left:3px solid #e2d8c4;color:#5c5347}
+.bd blockquote p{text-indent:0}
+/* ---- 文末括号注释：楷体居中 ---- */
+.bd p.note{font-family:"Kaiti SC",KaiTi,"楷体",serif;font-size:.88em;color:#6b6157;
+text-indent:0;text-align:center;margin:1em 0 .4em}
+/* ---- 图注：楷体居中 ---- */
+.bd p.cap{font-family:"Kaiti SC",KaiTi,"楷体",serif;font-size:.85em;color:#6b6157;
+text-indent:0;text-align:center;margin:-8px 0 .9em}
+/* ---- 落款日期：楷体右对齐（自序「写于…」、后记日期） ---- */
+.bd p.sign-date{font-family:"Kaiti SC",KaiTi,"楷体",serif;font-size:.85em;color:#6b6157;
+text-indent:0;text-align:right;margin:.2em 0 1.2em}
+.nav{display:flex;gap:10px;margin:46px 0 0;padding-top:24px;border-top:1px solid #e2d8c4;
+flex-wrap:wrap;justify-content:center}
+.nav a{flex:1;min-width:92px;text-align:center;text-decoration:none;color:#5c5347;
+border:1px solid #e2d8c4;border-radius:100px;padding:11px 14px;font-size:13.5px;
+font-family:"Kaiti SC",KaiTi,"楷体",serif}
+.nav a.pri{color:#9c3b32;border-color:rgba(156,59,50,.4)}
+.nav a.dis{opacity:.35}
+/* ---- 签名图：底色已换成页面米色，故去掉阴影与圆角 ---- */
+.bd img.sig{max-width:min(42%,160px);margin:14px auto;box-shadow:none;border-radius:0}
+/* ---- 过长的竖图：收窄显示，避免手机上看要大幅滚动 ---- */
+.bd img.tall{max-width:min(58%,300px);margin:22px auto}
+@media(max-width:400px){.bd{font-size:16.5px}.art h1{font-size:20px}.hint .book-title{font-size:23px}}

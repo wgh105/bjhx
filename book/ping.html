@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>连接自检 · 滨江怀想</title>
+<style>
+html,body{margin:0;height:100%}
+body{background:#f5efe2;color:#2c2620;
+font-family:"Songti SC",Songti,SimSun,"宋体",serif;
+display:flex;flex-direction:column;align-items:center;justify-content:center;
+min-height:100vh;padding:24px;box-sizing:border-box;text-align:center}
+.ok{font-size:38px;color:#9c3b32;margin:0 0 20px;font-weight:600}
+.t{font-size:17px;line-height:2;max-width:18em;margin:0 auto}
+.k{font-size:13px;color:#8a8073;margin-top:34px;line-height:2;
+font-family:"Kaiti SC",KaiTi,"楷体",serif;max-width:22em;word-break:break-all}
+b{color:#9c3b32}
+</style>
+</head>
+<body>
+<div class="ok">连接正常</div>
+<div class="t">
+能打开这一页，说明<b>手机与电脑在同一网络</b>，
+预览服务工作正常，可以返回阅读了。
+</div>
+<div class="k">
+本页地址：<span id="u"></span><br>
+服务器时间：<span id="h"></span>
+</div>
+<script>
+document.getElementById("u").textContent = location.href;
+document.getElementById("h").textContent = new Date().toLocaleString("zh-CN", {hour12:false});
+</script>
+</body>
+</html>

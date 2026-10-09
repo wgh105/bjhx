@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="sec" content="陪伴亲情">
+<link rel="stylesheet" href="style.css">
+<title>“半生半熟 ”新解 · 滨江怀想</title>
+</head>
+<body>
+<div class="wrap">
+<div class="art">
+<h1>“半生半熟 ”新解</h1>
+<div class="bd">
+<p><img src="../img/file16.jpg" alt="" /></p>
+<p>女儿自幼聪颖。18个月大，送进托儿所。</p>
+<p>一次， 阿姨们在讲到中午的菜肴时，她突然插嘴：“番茄嘛，烧烧汤吃。”引起哄堂大笑。要知道，不少小伙伴连 “爸爸、妈妈 ”都才刚刚学会叫呢。</p>
+<p>后来进了幼儿园。一天，一家三口逛公园回来，已近中午。赶紧动手做饭，由于心急慌忙，我把饭煮成夹生了。妻子开始责怪：你看，你看，这个饭半生半熟的，怎么吃啊？</p>
+<p>这时，女儿 “笃、笃、笃 ”地走了过来，说：“妈妈，我有一个好办法，饭不是半生半熟吗，中午，我们先把那一半熟的饭先吃掉，另一半生的饭，到了晚上煮一煮再吃。”</p>
+<p>妻子一把抱起女儿，亲一亲：“宝贝，真乖。你的办法真好、真好！”</p>
+<p>女儿脸上，也是一脸的得意。不过她弄不明白，为什么那天中午大家还是吃了方便面。</p>
+</section>
+<section id="和女儿一起迎考的日子" class="level2">
+</div>
+<div class="nav"><a href="p12.html">← 上一页</a><a class="pri" data-toc href="toc.html">目录</a><a href="p14.html">下一页 →</a></div>
+</div></div>
+<script>
+(function(){
+var GO={"p":"sec2.html","n":"p14.html","t":function(){return "toc.html"}};
+function goToc(){
+  try{
+    var m=document.querySelector('meta[name="sec"]');
+    if(m&&m.content) sessionStorage.setItem("bjhx_open_sec",m.content);
+    else sessionStorage.removeItem("bjhx_open_sec");
+  }catch(e){}
+  location.href=GO.t();
+}
+document.addEventListener("click",function(e){
+  var t=e.target;
+  if(t.closest&&t.closest("a,button"))return;
+  var w=window.innerWidth,h=window.innerHeight,x=e.clientX,y=e.clientY;
+  if(y>h*0.72){
+    if(x>w*0.62&&GO.n){location.href=GO.n;return;}
+    if(x<w*0.38&&GO.p){location.href=GO.p;return;}
+  }
+  if(x>w*0.30&&x<w*0.70&&y>h*0.28&&y<h*0.72){goToc();}
+});
+var L=document.querySelectorAll("a[data-toc]");
+for(var i=0;i<L.length;i++)(function(a){a.addEventListener("click",function(ev){ev.preventDefault();goToc();});})(L[i]);
+})();
+</script>
+
+</body>
+</html>

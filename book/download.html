@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<link rel="stylesheet" href="style.css">
+<title>下载 · 滨江怀想</title>
+</head>
+<body>
+<div class="wrap">
+<div class="pagehead"><h1>下载</h1></div>
+<div class="blk"><ol>
+<li><a href="../download/滨江怀想.epub" download><span class="n">EPUB</span><span>适合手机阅读器（华为阅读、微信读书等）</span></a></li>
+<li><a href="../download/滨江怀想.pdf" download><span class="n">PDF</span><span>适合电脑、平板，保留原版式与页码</span></a></li>
+</ol></div>
+<div class="nav"><a href="index.html">封面</a><a class="pri" href="toc.html">目录</a></div>
+</div>
+
+<script>
+(function(){
+var GO={"p":"p51.html","n":null,"t":function(){return "toc.html"}};
+function goToc(){
+  try{
+    var m=document.querySelector('meta[name="sec"]');
+    if(m&&m.content) sessionStorage.setItem("bjhx_open_sec",m.content);
+    else sessionStorage.removeItem("bjhx_open_sec");
+  }catch(e){}
+  location.href=GO.t();
+}
+document.addEventListener("click",function(e){
+  var t=e.target;
+  if(t.closest&&t.closest("a,button"))return;
+  var w=window.innerWidth,h=window.innerHeight,x=e.clientX,y=e.clientY;
+  if(y>h*0.72){
+    if(x>w*0.62&&GO.n){location.href=GO.n;return;}
+    if(x<w*0.38&&GO.p){location.href=GO.p;return;}
+  }
+  if(x>w*0.30&&x<w*0.70&&y>h*0.28&&y<h*0.72){goToc();}
+});
+var L=document.querySelectorAll("a[data-toc]");
+for(var i=0;i<L.length;i++)(function(a){a.addEventListener("click",function(ev){ev.preventDefault();goToc();});})(L[i]);
+})();
+</script>
+
+</body>
+</html>

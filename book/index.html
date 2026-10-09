@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<link rel="stylesheet" href="style.css">
+<title>封面 · 滨江怀想</title>
+</head>
+<body>
+<div class="cover">
+<img src="../cover_small.jpg" alt="《滨江怀想》封面">
+<a class="go" href="p01.html">开始阅读</a>
+<div class="tips">
+<div class="tt">温馨提示</div>
+<div class="tr"><b>点击屏幕右下角</b> —— 下一页</div>
+<div class="tr"><b>点击屏幕左下角</b> —— 上一页</div>
+<div class="tr"><b>点击屏幕中央</b> —— 返回目录</div>
+</div>
+</div>
+
+<script>
+(function(){
+var GO={"p":null,"n":"p01.html","t":function(){return "toc.html"}};
+function goToc(){
+  try{
+    var m=document.querySelector('meta[name="sec"]');
+    if(m&&m.content) sessionStorage.setItem("bjhx_open_sec",m.content);
+    else sessionStorage.removeItem("bjhx_open_sec");
+  }catch(e){}
+  location.href=GO.t();
+}
+document.addEventListener("click",function(e){
+  var t=e.target;
+  if(t.closest&&t.closest("a,button"))return;
+  var w=window.innerWidth,h=window.innerHeight,x=e.clientX,y=e.clientY;
+  if(y>h*0.72){
+    if(x>w*0.62&&GO.n){location.href=GO.n;return;}
+    if(x<w*0.38&&GO.p){location.href=GO.p;return;}
+  }
+  if(x>w*0.30&&x<w*0.70&&y>h*0.28&&y<h*0.72){goToc();}
+});
+var L=document.querySelectorAll("a[data-toc]");
+for(var i=0;i<L.length;i++)(function(a){a.addEventListener("click",function(ev){ev.preventDefault();goToc();});})(L[i]);
+})();
+</script>
+
+</body>
+</html>

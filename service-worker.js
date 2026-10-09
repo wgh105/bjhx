@@ -1,45 +1,17 @@
-const CACHE_NAME = 'binjiang-v1';
-const CORE_ASSETS = [
-  './',
-  './index.html',
-  './_catalog.json',
-  './cover.jpg',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
-  './manifest.webmanifest'
-];
-
-self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(CORE_ASSETS)));
+/* 自毁型 Service Worker：老读者浏览器里残留的 2025 旧版 SW 会被此文件替换并清除缓存 */
+self.addEventListener('install', function(e) {
   self.skipWaiting();
 });
-
-self.addEventListener('activate', (e) => {
+self.addEventListener('activate', function(e) {
   e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.map(k => (k === CACHE_NAME ? null : caches.delete(k))))
-    )
+    Promise.all([
+      self.registration.unregister(),
+      caches.keys().then(function(names) {
+        return Promise.all(names.map(function(n) { return caches.delete(n); }));
+      })
+    ]).then(function() { return self.clients.claim(); })
   );
-  self.clients.claim();
 });
-
-self.addEventListener('fetch', (e) => {
-  const url = new URL(e.request.url);
-  if (url.pathname.endsWith('/index.html') || url.pathname === '/' ) {
-    e.respondWith(
-      caches.match(e.request).then(cached => cached ||
-        fetch(e.request).then(res => {
-          caches.open(CACHE_NAME).then(c => c.put(e.request, res.clone()));
-          return res;
-        })
-      )
-    );
-    return;
-  }
-  e.respondWith(
-    fetch(e.request).then(res => {
-      caches.open(CACHE_NAME).then(c => c.put(e.request, res.clone()));
-      return res;
-    }).catch(() => caches.match(e.request))
-  );
+self.addEventListener('fetch', function(e) {
+  /* 全部直连网络，不再拦截 */
 });
