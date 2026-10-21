@@ -4,17 +4,25 @@ body{background:#f5efe2;color:#2c2620;line-height:1.85;
 font-family:"Songti SC","Noto Serif CJK SC",STSong,SimSun,"宋体",serif;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
 a{color:#9c3b32}
 .wrap{max-width:760px;margin:0 auto;padding:0 20px 70px}
+/* 首屏：宽屏下封面完整显示不裁切；手机竖屏下满宽放大（仅裁左右窄边，书名与外白渡桥完整保留） */
 .cover{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
-padding:40px 24px;text-align:center}
-.cover img{width:min(62vw,258px);border-radius:6px;display:block;margin:0 auto 30px;
-box-shadow:0 14px 40px rgba(80,55,20,.28)}
-.cover .go{display:inline-block;background:#9c3b32;color:#fff;text-decoration:none;
-border-radius:100px;padding:13px 42px;font-size:15px}
-.tips{margin-top:26px;max-width:330px;width:100%;border:1px solid #e2d8c4;border-radius:10px;
-padding:16px 20px 14px;text-align:left;background:rgba(255,253,247,.6)}
+padding:0 14px 14px;text-align:center}
+.cimg{position:relative;width:100%;margin:0 0 14px}
+.cimg img{width:min(100%,380px);height:auto;max-height:76vh;object-fit:contain;
+border-radius:6px;display:block;margin:0 auto}
+.cimg .go{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);
+white-space:nowrap;background:rgba(156,59,50,.94);color:#fff;text-decoration:none;
+border-radius:100px;padding:11px 40px;font-size:15.5px;letter-spacing:.14em;
+box-shadow:0 6px 18px rgba(60,35,10,.38)}
+.tips{margin:0;max-width:340px;width:100%;border:1px solid #e2d8c4;border-radius:10px;
+padding:12px 18px 10px;text-align:left;background:rgba(255,253,247,.6)}
+@media (max-aspect-ratio:3/4){
+.cimg img{width:100%;height:calc(100vh - 150px);max-height:none;
+object-fit:cover;object-position:center}
+}
 .tips .tt{text-align:center;font-size:14px;letter-spacing:.24em;color:#9c3b32;font-weight:600;
 margin-bottom:10px;font-family:"Kaiti SC",KaiTi,"楷体",serif}
-.tips .tr{font-size:12.5px;color:#5c5347;line-height:2.05;font-family:"Kaiti SC",KaiTi,"楷体",serif}
+.tips .tr{font-size:12.5px;color:#5c5347;line-height:1.9;font-family:"Kaiti SC",KaiTi,"楷体",serif}
 .tips .tr b{color:#2c2620;font-weight:600}
 /* ---- 可折叠目录页 ---- */
 .toc-new{max-width:520px;padding-top:18px}
