@@ -93,5 +93,30 @@ for(var i=0;i<L.length;i++)(function(a){a.addEventListener("click",function(ev){
 })();
 </script>
 
+<!--nav-boost-->
+<script>
+/* 底部导航：整块热区 + 触摸即时响应（防止手机端点偏、点快而"没反应"） */
+(function(){
+  var nav=document.querySelector('.nav');
+  if(!nav)return;
+  var as=nav.getElementsByTagName('a');
+  for(var i=0;i<as.length;i++){(function(a){
+    var sx=0,sy=0,st=0;
+    a.addEventListener('touchstart',function(e){
+      var t=e.touches[0];sx=t.clientX;sy=t.clientY;st=+new Date();
+    },{passive:true});
+    a.addEventListener('touchend',function(e){
+      var t=e.changedTouches[0];
+      if(!t)return;
+      if(Math.abs(t.clientX-sx)>14||Math.abs(t.clientY-sy)>14)return;
+      if(+new Date()-st>900)return;
+      var h=a.getAttribute('href');
+      if(!h)return;
+      e.preventDefault();
+      location.href=h;
+    },{passive:false});
+  })(as[i]);}
+})();
+</script>
 </body>
 </html>

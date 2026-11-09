@@ -3,7 +3,7 @@ html,body{margin:0;padding:0}
 body{background:#f5efe2;color:#2c2620;line-height:1.85;
 font-family:"Songti SC","Noto Serif CJK SC",STSong,SimSun,"宋体",serif;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
 a{color:#9c3b32}
-.wrap{max-width:760px;margin:0 auto;padding:0 20px 70px}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px 96px}
 /* 首屏：宽屏下封面完整显示不裁切；手机竖屏下满宽放大（仅裁左右窄边，书名与外白渡桥完整保留） */
 .cover{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
 padding:0 14px 14px;text-align:center}
@@ -88,11 +88,14 @@ text-indent:0;text-align:center;margin:-8px 0 .9em}
 /* ---- 落款日期：楷体右对齐（自序「写于…」、后记日期） ---- */
 .bd p.sign-date{font-family:"Kaiti SC",KaiTi,"楷体",serif;font-size:.85em;color:#6b6157;
 text-indent:0;text-align:right;margin:.2em 0 1.2em}
-.nav{display:flex;gap:10px;margin:46px 0 0;padding-top:24px;border-top:1px solid #e2d8c4;
+.nav{display:flex;gap:8px;margin:46px 0 0;padding-top:24px;border-top:1px solid #e2d8c4;
 flex-wrap:wrap;justify-content:center}
 .nav a{flex:1;min-width:92px;text-align:center;text-decoration:none;color:#5c5347;
-border:1px solid #e2d8c4;border-radius:100px;padding:11px 14px;font-size:13.5px;
-font-family:"Kaiti SC",KaiTi,"楷体",serif}
+border:1px solid #e2d8c4;border-radius:100px;padding:15px 10px;font-size:13.5px;
+font-family:"Kaiti SC",KaiTi,"楷体",serif;
+display:flex;align-items:center;justify-content:center;min-height:54px;
+touch-action:manipulation;cursor:pointer;-webkit-user-select:none;user-select:none}
+.nav a:active{background:rgba(226,216,196,.45)}
 .nav a.pri{color:#9c3b32;border-color:rgba(156,59,50,.4)}
 .nav a.dis{opacity:.35}
 /* ---- 签名图：底色已换成页面米色，故去掉阴影与圆角 ---- */

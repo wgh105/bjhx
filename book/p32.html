@@ -30,9 +30,7 @@
 <p>我们来到了山坡边上的一处观景台，这里居高临下，是俯瞰整个珀斯美景的绝佳去处，从这里望去，高楼林立的市中心、碧波荡漾的天鹅河和绵延不断的达令山尽收眼底。</p>
 <p>难得的是这里一点不见国内公园拥挤的现象，游客寥寥无几，当我们尽情的取景、留影时，两位洋老太在一边笑盈盈的行注目礼。</p>
 <p>我们沿着公园的林荫大道缓缓前行，两边是高耸入云的桉树林，树形优美，白色的树干整洁端庄。前面是享誉世界的西澳植物园，各种特色植物在眼前穿梭而过。凡是那些枝、叶、花、果有些特别的植物，都会引起我们的兴趣，我们会停下脚步细细的看一下信息牌。女儿的工作是翻译，出于工作的本能，她查一下它们的中文名称，并收藏入自己的词汇库。</p>
-<blockquote>
 <p>再往前走，在一大片密密的灌木丛前， 赫然树立着一块告示牌，上画一只硕大的老鼠。</p>
-</blockquote>
 <p>“哟，这里有老鼠出没！”</p>
 <p>“但老鼠没有这么大的耳朵呀！”</p>
 <p>请教了词典以后才知道，这叫袋狸，被澳洲人称为“毛茸茸的小淘气”，已经列入澳大利亚濒危物种排行榜的第五名了！</p>
@@ -77,5 +75,30 @@ for(var i=0;i<L.length;i++)(function(a){a.addEventListener("click",function(ev){
 })();
 </script>
 
+<!--nav-boost-->
+<script>
+/* 底部导航：整块热区 + 触摸即时响应（防止手机端点偏、点快而"没反应"） */
+(function(){
+  var nav=document.querySelector('.nav');
+  if(!nav)return;
+  var as=nav.getElementsByTagName('a');
+  for(var i=0;i<as.length;i++){(function(a){
+    var sx=0,sy=0,st=0;
+    a.addEventListener('touchstart',function(e){
+      var t=e.touches[0];sx=t.clientX;sy=t.clientY;st=+new Date();
+    },{passive:true});
+    a.addEventListener('touchend',function(e){
+      var t=e.changedTouches[0];
+      if(!t)return;
+      if(Math.abs(t.clientX-sx)>14||Math.abs(t.clientY-sy)>14)return;
+      if(+new Date()-st>900)return;
+      var h=a.getAttribute('href');
+      if(!h)return;
+      e.preventDefault();
+      location.href=h;
+    },{passive:false});
+  })(as[i]);}
+})();
+</script>
 </body>
 </html>

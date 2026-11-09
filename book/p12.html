@@ -30,11 +30,9 @@
 <p>小时候，总梦想探索灰楼背后的世界。如今，站在这里，眼前的一切让我激动不已，耳畔响起了一个声音：“看，我们终于来了！”</p>
 <p>这片景致，给了我们一场视觉的盛宴，圆了儿时心里的小小的梦想。灰楼的背后，是一个如此绚烂多彩的世界。 灰楼，你见证了上海的变迁和繁华，你必将见证上海更加美好的未来！</p>
 <p class="note">（本文刊登于2024.6.11《上海老年报》）</p>
-<blockquote>
 <p><img src="../img/file13.jpg" alt="" /></p>
 <p class="cap">灰 楼</p>
 <p><img src="../img/file14.jpg" class="tall" alt="" /></p>
-</blockquote>
 </section>
 </section>
 </div>
@@ -66,5 +64,30 @@ for(var i=0;i<L.length;i++)(function(a){a.addEventListener("click",function(ev){
 })();
 </script>
 
+<!--nav-boost-->
+<script>
+/* 底部导航：整块热区 + 触摸即时响应（防止手机端点偏、点快而"没反应"） */
+(function(){
+  var nav=document.querySelector('.nav');
+  if(!nav)return;
+  var as=nav.getElementsByTagName('a');
+  for(var i=0;i<as.length;i++){(function(a){
+    var sx=0,sy=0,st=0;
+    a.addEventListener('touchstart',function(e){
+      var t=e.touches[0];sx=t.clientX;sy=t.clientY;st=+new Date();
+    },{passive:true});
+    a.addEventListener('touchend',function(e){
+      var t=e.changedTouches[0];
+      if(!t)return;
+      if(Math.abs(t.clientX-sx)>14||Math.abs(t.clientY-sy)>14)return;
+      if(+new Date()-st>900)return;
+      var h=a.getAttribute('href');
+      if(!h)return;
+      e.preventDefault();
+      location.href=h;
+    },{passive:false});
+  })(as[i]);}
+})();
+</script>
 </body>
 </html>

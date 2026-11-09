@@ -12,9 +12,7 @@
 <div class="art">
 <h1>三进鹿角公园</h1>
 <div class="bd">
-<blockquote>
 <p>旅游团离开了危崖壁立、浩瀚无边的大峡谷，奔向了举世闻名的梦幻之园——黄石公园。途中我们来到了被称为“怀俄明州一颗璀璨的明珠”的漂亮小镇——杰克逊。</p>
-</blockquote>
 <p>导游早就作了简要的介绍：“杰克逊小镇四面环山，犹如镶嵌在洛基山深处一颗小巧明亮的珍珠。这里是通往黄石公园的必经之路，还是冬季滑雪的理想之地，所以来往游客特别多。街道不大，人口不多。小镇严格说只有一条主要商业街道，如果快步疾走，恐怕半个小时就能从头走到尾。最有特色的是十字街中有一个不大的‘鹿角公园’……”</p>
 <p>在宣布了返回的时间和集中的地点以后，导游让大家自由活动。</p>
 <p>这时，我赶紧掏出手机，对集合地点旁的一块路牌照了一张，还对着旁边一幢挂有“Snake River Angler”牌子的尖顶小屋也照了一张。妻子在旁，对我的举动有些疑惑不解，殊不知，这恰恰是我的深思熟虑之举。妻子和我都是“路盲”。尤其是我，在原地转三圈也会找不到北。现在好了，有了集合地点的“标志性建筑”和路名，镇又那么小，到时候，随便请个镇上的人看一看手机上的画面，然后再指一指方向，还怕迷路吗？</p>
@@ -43,15 +41,11 @@
 <p>当我陪着导游再次回到与妻子失散处时，已是满头大汗了……</p>
 <p>稍后，导游的手机响了。他笑笑说：你太太还算聪明，请一个老外打了我的手机，告诉我她就在鹿角公园 ……</p>
 <p>导游和我再次奔向鹿角公园。</p>
-<blockquote>
 <p>妻子正在那鹿角拱门下，焦急地张望呢!</p>
 <p>她刚要开口埋怨，我赶紧逗趣打诨道：呵呵，有缘，有缘！三进鹿角公园！</p>
-</blockquote>
 <p class="note">（本文刊登在2015年9月《杨浦教师进修学院院报》）</p>
-<blockquote>
 <p><img src="../img/file38.jpg" alt="鹿角公园.jpg" /></p>
 <p class="cap">鹿角公园 用鹿角堆成的拱门</p>
-</blockquote>
 </section>
 <section id="水域公寓和国王公园" class="level2">
 </div>
@@ -83,5 +77,30 @@ for(var i=0;i<L.length;i++)(function(a){a.addEventListener("click",function(ev){
 })();
 </script>
 
+<!--nav-boost-->
+<script>
+/* 底部导航：整块热区 + 触摸即时响应（防止手机端点偏、点快而"没反应"） */
+(function(){
+  var nav=document.querySelector('.nav');
+  if(!nav)return;
+  var as=nav.getElementsByTagName('a');
+  for(var i=0;i<as.length;i++){(function(a){
+    var sx=0,sy=0,st=0;
+    a.addEventListener('touchstart',function(e){
+      var t=e.touches[0];sx=t.clientX;sy=t.clientY;st=+new Date();
+    },{passive:true});
+    a.addEventListener('touchend',function(e){
+      var t=e.changedTouches[0];
+      if(!t)return;
+      if(Math.abs(t.clientX-sx)>14||Math.abs(t.clientY-sy)>14)return;
+      if(+new Date()-st>900)return;
+      var h=a.getAttribute('href');
+      if(!h)return;
+      e.preventDefault();
+      location.href=h;
+    },{passive:false});
+  })(as[i]);}
+})();
+</script>
 </body>
 </html>

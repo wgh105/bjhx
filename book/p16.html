@@ -21,16 +21,12 @@
 <p>能不能留在澳洲，这是由上帝决定的。过好2010年的每一天，这才是最重要的。</p>
 <p>我想以下几点你还是要注意的：</p>
 <p>一、不管老的还是小的，身体都是要放在第一位的。（这是大娘娘的话）</p>
-<blockquote>
 <p>第一尽最大的努力不要熬夜。第二再学会烹调几个自己喜欢吃的菜。第三常常散步，最好能有些运动。第四瓜果蔬菜搭配保持进出顺畅。第五久坐了起来活动，电脑前 一小时做做眼保健操。……</p>
-</blockquote>
 <p>二、学习方面你的办法很多。我只谈谈学习方面的心态：平和一点、扎实一点、真才实学与争取分数适当兼顾，细水长流是比较重要的。</p>
 <p>三、不断地疏导自己的心理，听一些音乐，保持良好的心境。</p>
-<blockquote>
 <p>你身上有些优点很重要，待人相对比较真诚，不会妒忌别人；反应灵活，办事周密；性格比较外向，喜欢结交朋友，也比较善于交友。这些很不容易呀，继续发扬。</p>
 <p>我和你妈祈求神庇佑你，身体健康、心情开朗、学业顺利、找到知己。</p>
 <p>经济上不必太节约（比如新学期的住房，综合条件可以好一点），钱花在这种地方，也算花在刀口上的。</p>
-</blockquote>
 <p>如果有空，多写写信当然很好，短的几句也行啊。</p>
 <p>爸爸 2009-12-31晚八点半</p>
 </section>
@@ -64,5 +60,30 @@ for(var i=0;i<L.length;i++)(function(a){a.addEventListener("click",function(ev){
 })();
 </script>
 
+<!--nav-boost-->
+<script>
+/* 底部导航：整块热区 + 触摸即时响应（防止手机端点偏、点快而"没反应"） */
+(function(){
+  var nav=document.querySelector('.nav');
+  if(!nav)return;
+  var as=nav.getElementsByTagName('a');
+  for(var i=0;i<as.length;i++){(function(a){
+    var sx=0,sy=0,st=0;
+    a.addEventListener('touchstart',function(e){
+      var t=e.touches[0];sx=t.clientX;sy=t.clientY;st=+new Date();
+    },{passive:true});
+    a.addEventListener('touchend',function(e){
+      var t=e.changedTouches[0];
+      if(!t)return;
+      if(Math.abs(t.clientX-sx)>14||Math.abs(t.clientY-sy)>14)return;
+      if(+new Date()-st>900)return;
+      var h=a.getAttribute('href');
+      if(!h)return;
+      e.preventDefault();
+      location.href=h;
+    },{passive:false});
+  })(as[i]);}
+})();
+</script>
 </body>
 </html>
